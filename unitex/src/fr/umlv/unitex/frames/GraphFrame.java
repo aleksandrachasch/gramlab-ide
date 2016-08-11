@@ -12,7 +12,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
@@ -39,6 +39,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -99,10 +101,11 @@ import fr.umlv.unitex.process.commands.Grf2Fst2Command;
 import fr.umlv.unitex.process.commands.GrfDiffCommand;
 import fr.umlv.unitex.svn.ConflictSolvedListener;
 import fr.umlv.unitex.svn.SvnConflict;
+import fr.umlv.unitex.utils.KeyUtil;
 
 /**
  * This class describes a frame used to display and edit a graph.
- * 
+ *
  * @author Sébastien Paumier
  */
 public class GraphFrame extends KeyedInternalFrame<File> {
@@ -211,7 +214,7 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 
 	/**
 	 * Constructs a new <code>GraphFrame</code>
-	 * 
+	 *
 	 * @param nonEmpty
 	 *            indicates if the graph is non empty
 	 */
@@ -225,6 +228,7 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 		mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		final JPanel top = new JPanel(new BorderLayout());
 		top.add(buildTextPanel(), BorderLayout.NORTH);
+		KeyUtil.addMinimizeFrameListener(top);
 		graphicalZone = new GraphicalZone(g, getBoxContentEditor(), this, null);
 		graphicalZone.addGraphListener(new GraphListener() {
 			@Override
@@ -564,6 +568,10 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 		configuration.setMaximumSize(new Dimension(36, 36));
 		configuration.setMinimumSize(new Dimension(36, 36));
 		configuration.setPreferredSize(new Dimension(36, 36));
+		final JButton findAndReplace = new JButton(MyCursors.findAndReplaceIcon);
+		findAndReplace.setMaximumSize(new Dimension(36, 36));
+		findAndReplace.setMinimumSize(new Dimension(36, 36));
+		findAndReplace.setPreferredSize(new Dimension(36, 36));
 		save.setToolTipText("Save graph");
 		compile.setToolTipText("Compile graph");
 		copy.setToolTipText("Copy");
@@ -576,6 +584,7 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 		reverseLink.setToolTipText("Reversed link between boxes");
 		openSubgraph.setToolTipText("Open a sub-graph");
 		configuration.setToolTipText("Graph configuration");
+		findAndReplace.setToolTipText("Find and replace");
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -700,6 +709,18 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 				});
 			}
 		});
+		findAndReplace.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+            final FindAndReplaceDialog dialog = GlobalProjectManager.search(null).getFrameManagerAs(InternalFrameManager.class).newFindAndReplaceDialog();
+            GlobalProjectManager.search(null).getFrameManagerAs(InternalFrameManager.class).addObserver(dialog);
+          }
+				});
+			}
+		});
 		final ButtonGroup bg = new ButtonGroup();
 		bg.add(normalButton);
 		bg.add(create);
@@ -728,6 +749,11 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 		myToolBar.addSeparator();
 		myToolBar.addSeparator();
 		myToolBar.add(configuration);
+		myToolBar.addSeparator();
+		myToolBar.addSeparator();
+		myToolBar.add(findAndReplace);
+		myToolBar.addSeparator();
+		myToolBar.addSeparator();
 		final JButton calledGrf = new JButton(MyCursors.calledGrfIcon);
 		calledGrf.setMaximumSize(new Dimension(36, 36));
 		calledGrf.setMinimumSize(new Dimension(36, 36));
@@ -1002,7 +1028,7 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 
 	/**
 	 * Resizes the drawing area
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 */
@@ -1016,7 +1042,7 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 
 	/**
 	 * Sets the <code>modified</code> field
-	 * 
+	 *
 	 * @param b
 	 *            <code>true</code> if the graph must be marked as modified,
 	 *            <code>false</code> otherwise
@@ -1040,7 +1066,7 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 
 	/**
 	 * Sets the zoom scale factor
-	 * 
+	 *
 	 * @param d
 	 *            scale factor
 	 */
@@ -1183,7 +1209,7 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 
 	/**
 	 * This function saves the current graph frame as a SVG file.
-	 * 
+	 *
 	 * @param file
 	 */
 	public void saveGraphAsAnSVG(File file) {
@@ -1334,7 +1360,7 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 
 	public boolean saveGraph() {
 		if(graphicalZone.text.isModified())
-			if(!graphicalZone.text.validateContent()) 
+			if(!graphicalZone.text.validateContent())
 				return false;
 		final File file = getGraph();
 		if (file == null) {
@@ -1353,7 +1379,38 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 	public boolean saveAsGraph() {
 		return saveAsGraph(false);
 	}
-	
+
+	/**
+	 * A method to provide "Save As /foo/bar.grf" functionality to a graph.
+	 * This method saves current graph frame at a particular location with the specified name.
+	 *
+	 * @author Mukarram Tailor
+	 * @param  path
+	 * 		the absolute path(to be saved at) of .grf file
+	 * @param  validated
+	 * 		boolean stating validation of content of .grf file
+	 * @return
+	 * 		true if saveAs operation is successful, else false
+	 */
+	public boolean saveAsGraph(String path, boolean validated){
+		if(!validated) {
+			if(graphicalZone.text.isModified()){
+				if(!graphicalZone.text.validateContent()){
+					return false;
+				}
+			}
+		}
+		final GraphIO g = new GraphIO(graphicalZone);
+		Path p = Paths.get(path);
+		File newFile = p.toFile();
+		if (newFile == null) {
+			return false;
+		}
+		g.saveGraph(newFile);
+		setGraph(newFile, newFile, false);
+		return true;
+	}
+
 	private boolean saveAsGraph(boolean validated) {
 		if(!validated) {
 			if(graphicalZone.text.isModified())
@@ -1414,17 +1471,17 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 		setGraph(file, file, false);
 		return true;
 	}
-	
+
 	public void exportPng()
 	{
 		GraphExportDialog.openDialog(getGraphicalZone(), GraphExportDialog.FORMAT_PNG);
 	}
-	
+
 	public void exportJpeg()
 	{
 		GraphExportDialog.openDialog(getGraphicalZone(), GraphExportDialog.FORMAT_JPEG);
 	}
-	
+
 	public void exportSvg() {
 		GraphExportDialog.openDialog(getGraphicalZone(), GraphExportDialog.FORMAT_SVG);
 	}
@@ -1471,5 +1528,13 @@ public class GraphFrame extends KeyedInternalFrame<File> {
 	public JPanel getSvnPanel() {
 		return svnPanel;
 	}
+
+  @Override
+  public String toString() {
+    if(grf == null) {
+      return "Unsaved graph";
+    }
+    return grf.getName();
+  }
 
 }

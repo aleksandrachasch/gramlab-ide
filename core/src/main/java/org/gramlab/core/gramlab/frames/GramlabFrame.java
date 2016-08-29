@@ -18,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -45,7 +46,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
+import javax.xml.transform.TransformerException;
 
+import org.apache.batik.apps.rasterizer.SVGConverterException;
+import org.apache.batik.transcoder.TranscoderException;
 import org.gramlab.core.GramlabConfigManager;
 import org.gramlab.core.gramlab.icons.Icons;
 import org.gramlab.core.gramlab.project.GramlabProject;
@@ -99,6 +103,7 @@ import org.gramlab.core.umlv.unitex.process.commands.SvnCommand;
 import org.gramlab.core.umlv.unitex.process.commands.UncompressCommand;
 import org.gramlab.core.umlv.unitex.svn.SvnConflict;
 import org.gramlab.core.umlv.unitex.utils.HelpMenuBuilder;
+import org.gramlab.plugins.treecloud.TreeCloud;
 
 @SuppressWarnings("serial")
 public class GramlabFrame extends JFrame {
@@ -1501,6 +1506,17 @@ public class GramlabFrame extends JFrame {
 		bar.add(createGraphsMenu());
 		bar.add(createFileEditionMenu());
 		bar.add(createHelpMenu());
+		/*
+		 * add TreeCloud 
+		 */
+		TreeCloud tc = new TreeCloud();
+		try {
+			bar.add(tc.AddMenu());
+		} catch (IOException | InterruptedException | TransformerException | SVGConverterException
+				| TranscoderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return bar;
 	}
 

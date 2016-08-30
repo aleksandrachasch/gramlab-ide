@@ -46,7 +46,7 @@ public JMenu AddMenu() throws IOException, InterruptedException, TransformerExce
 						JOptionPane.showMessageDialog(null, "Cannot build TreeCloud as there is no Concordance in current project.", "Error", JOptionPane.CLOSED_OPTION);
 				break;	
 				};	
-				t.removestopwords = true;
+				t.removestopwords = false;
 				t.setLanguage(lang);
 				t.setNumberOfTaxa(30);
 				t.colormode = "Red & blue";

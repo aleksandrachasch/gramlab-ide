@@ -1,4 +1,4 @@
-package org.gramlab.plugins.treecloud;
+package org.gramlab.core.plugins.treecloud;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -69,17 +69,6 @@
 				</fileset>
 			</classpath>
 		</javac>
-		<!-- Compile api -->
-		<subant target="build" failonerror="false">
-			<fileset dir="api" includes="build.xml" />
-		</subant>
-		<!-- Compile core-plugins -->
-		<subant target="build" failonerror="false">
-			<fileset dir="${plugins}">
-				<include name="**/build.xml" />
-				<exclude name="build.xml" />
-			</fileset>
-		</subant>
 	</target>
 
 	<target name="dist" depends="compile" description="generate the distribution">

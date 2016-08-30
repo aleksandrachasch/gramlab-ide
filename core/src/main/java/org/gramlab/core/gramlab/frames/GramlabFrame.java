@@ -83,6 +83,7 @@ import org.gramlab.core.gramlab.workspace.ProjectTabbedPane;
 import org.gramlab.core.gramlab.workspace.RootNode;
 import org.gramlab.core.gramlab.workspace.WorkspaceTreeModel;
 import org.gramlab.core.gramlab.workspace.WorkspaceTreeNode;
+import org.gramlab.core.plugins.treecloud.TreeCloud;
 import org.gramlab.core.umlv.unitex.DropTargetManager;
 import org.gramlab.core.umlv.unitex.common.project.manager.GlobalProjectManager;
 import org.gramlab.core.umlv.unitex.config.ConfigManager;
@@ -103,7 +104,6 @@ import org.gramlab.core.umlv.unitex.process.commands.SvnCommand;
 import org.gramlab.core.umlv.unitex.process.commands.UncompressCommand;
 import org.gramlab.core.umlv.unitex.svn.SvnConflict;
 import org.gramlab.core.umlv.unitex.utils.HelpMenuBuilder;
-import org.gramlab.plugins.treecloud.TreeCloud;
 
 @SuppressWarnings("serial")
 public class GramlabFrame extends JFrame {

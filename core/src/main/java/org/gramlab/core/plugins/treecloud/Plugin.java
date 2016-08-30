@@ -22,7 +22,7 @@
  * Unitex/GramLab Skeleton plugin
  * add by martinec
  */ 
-package org.gramlab.plugins.treecloud;
+package org.gramlab.core.plugins.treecloud;
 
 import ro.fortsoft.pf4j.PluginWrapper;
 import com.github.zafarkhaja.semver.Version;

@@ -1,4 +1,4 @@
-package org.gramlab.plugins.treecloud;
+package org.gramlab.core.plugins.treecloud;
 
 import org.w3c.dom.Document;
 

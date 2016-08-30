@@ -1,4 +1,4 @@
-package org.gramlab.plugins.treecloud;
+package org.gramlab.core.plugins.treecloud;
 
 import java.util.ArrayList;
 import java.util.Collections;

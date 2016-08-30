@@ -103,7 +103,7 @@ public class Tree {
 	public String getStopWordsFile(String workinglanguage){
 		
 		if(workinglanguage.equals("en") | workinglanguage.equals("fr")){
-			return "C:/stopwords/StoplistEnglishFrench.txt";
+			return "StoplistEnglishFrench.txt";
 			
 		}else if(workinglanguage.equals("ge")){
 			return "StoplistGerman.txt";

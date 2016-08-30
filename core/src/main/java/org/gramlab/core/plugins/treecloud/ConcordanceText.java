@@ -415,7 +415,6 @@ public class ConcordanceText {
 			   distance.add(distancerow);
 			   j += 1;
 		   }
-		   System.out.println(distance);
 		
 		   return distance;
 		   
@@ -771,7 +770,6 @@ public class ConcordanceText {
     	 * Read lines from "concord.html"; remove html tags, set locate pattern
     	 */
     	ArrayList<String> lines = readConcor(filepath);
-    	System.out.println(text(lines));
     	/*
     	 * Split lines into words and compare with "tokens.txt" (this will avoid adding "cut" words from the sides of the concordance lines)
     	 */
@@ -779,7 +777,6 @@ public class ConcordanceText {
     	/*
     	 * Frequency dictionnary
     	 */
-    	System.out.println("words: " + text);
     	Map<String, Integer> tmp = freqsDict(text);
     	//System.out.println(tmp);
     	/*

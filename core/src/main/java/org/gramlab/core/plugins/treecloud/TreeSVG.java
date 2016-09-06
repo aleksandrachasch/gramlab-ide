@@ -30,6 +30,12 @@ public class TreeSVG {
 		svgRoot.setAttributeNS(null, "width", "500");
 		svgRoot.setAttributeNS(null, "height", "500");
 		svgRoot.setAttributeNS(null, "viewBox", getViewBox(nodes));
+
+		Element rect = doc.createElementNS(svgNS, "rect");
+		rect.setAttributeNS(null, "width", "500");
+		rect.setAttributeNS(null, "height", "500");
+		svgRoot.appendChild(rect);
+
 		for(int i=0; i<nodes.size(); i++){
 	
 				Element path = doc.createElementNS(svgNS, "path");

@@ -34,6 +34,7 @@ public class TreeSVG {
 		Element rect = doc.createElementNS(svgNS, "rect");
 		rect.setAttributeNS(null, "width", "500");
 		rect.setAttributeNS(null, "height", "500");
+		rect.setAttributeNS(null, "style", "fill:rgb(250,250,250);stroke-width:3;stroke:rgb(200,200,200)");
 		svgRoot.appendChild(rect);
 
 		for(int i=0; i<nodes.size(); i++){

@@ -10,9 +10,9 @@ GramLab is the Integrated Development Environment (IDE) of [Unitex/GramLab][unit
 
 ## How to Build
 
-    git clone https://github.com/UnitexGramLab/gramlab-ide
+    git clone https://github.com/aleksandrachasch/gramlab-ide.git -b treecloud-sandbox
     cd gramlab-ide
-    ant
+    ant dist
 
 ## GramLab Plugins
 
